@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:#F5F0E8;color:#2C2C2C;min-height:100vh}
 .paint-border{height:8px;background:linear-gradient(90deg,#FF7043 0%,#FF7043 12.5%,#FFB74D 12.5%,#FFB74D 25%,#FFF176 25%,#FFF176 37.5%,#81C784 37.5%,#81C784 50%,#4FC3F7 50%,#4FC3F7 62.5%,#7986CB 62.5%,#7986CB 75%,#BA68C8 75%,#BA68C8 87.5%,#F48FB1 87.5%,#F48FB1 100%)}
-.header{background:linear-gradient(135deg,#4A148C 0%,#6A1B9A 60%,#7B1FA2 100%);padding:28px 32px 22px;position:relative;overflow:hidden}
+.header{background:linear-gradient(135deg,#0E1C42 0%,#1A2D5A 60%,#243868 100%);border-bottom:6px solid #0288D1;padding:22px 28px 24px;position:relative;overflow:hidden}
 .header::after{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;background:rgba(255,255,255,0.04);border-radius:50%}
 .header-top{display:flex;align-items:center;gap:16px;margin-bottom:8px}
 .subject-badge{background:linear-gradient(135deg,#CE93D8,#AB47BC);color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px}
@@ -17,24 +17,24 @@ body{font-family:'Nunito',sans-serif;background:#F5F0E8;color:#2C2C2C;min-height
 .header h1{color:#fff;font-size:1.65rem;font-weight:900;line-height:1.2;margin-bottom:6px}
 .header-meta{color:rgba(255,255,255,0.7);font-size:0.82rem;font-weight:600;letter-spacing:0.5px}
 .info-strip{background:linear-gradient(90deg,#F3E5F5,#EDE7F6);border-bottom:3px solid #CE93D8;padding:10px 32px;display:flex;gap:28px;flex-wrap:wrap}
-.info-item{font-size:0.8rem;font-weight:700;color:#6A1B9A}
+.info-item{font-size:0.8rem;font-weight:700;color:#1A2D5A}
 .info-item span{color:#555;font-weight:600}
 .content{max-width:820px;margin:0 auto;padding:28px 24px}
 .art-divider{text-align:center;font-size:1.5rem;margin:18px 0;letter-spacing:6px;opacity:0.5}
 .rainbow-frame{padding:4px;background:linear-gradient(90deg,#FF7043,#FFB74D,#FFF176,#81C784,#4FC3F7,#7986CB,#BA68C8,#F48FB1);border-radius:14px;display:block;width:100%;box-sizing:border-box;margin-bottom:20px}
 .rainbow-frame img{display:block;width:100%;border-radius:11px}
 .step-card{background:#fff;border-radius:16px;padding:18px 22px;border:2px solid #E8DDD2;box-shadow:0 3px 12px rgba(0,0,0,0.07);margin-bottom:14px;display:flex;gap:14px;align-items:flex-start}
-.step-num{background:linear-gradient(135deg,#CE93D8,#7B1FA2);color:#fff;font-size:1rem;font-weight:900;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-num{background:linear-gradient(135deg,#0277BD,#0288D1);color:#fff;font-size:1rem;font-weight:900;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .step-body{flex:1}
-.step-title{font-size:0.95rem;font-weight:900;color:#4A148C;margin-bottom:4px}
+.step-title{font-size:0.95rem;font-weight:900;color:#0E1C42;margin-bottom:4px}
 .step-desc{font-size:0.85rem;color:#555;line-height:1.5}
 .gw{background:#FAFAF6;border-radius:18px;border:2px solid #E8DDD2;overflow:hidden;margin:20px 0}
 .gh{padding:16px 20px;background:linear-gradient(135deg,#F3E5F5,#EDE7F6);border-bottom:2px solid #CE93D8;text-align:center}
-.gh h3{font-size:1.05rem;font-weight:900;color:#6A1B9A;margin-bottom:2px}
+.gh h3{font-size:1.05rem;font-weight:900;color:#1A2D5A;margin-bottom:2px}
 .gh p{font-size:0.8rem;color:#555}
 .gb{padding:20px}
 .chip-tray{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;min-height:50px;padding:10px;background:#fff;border-radius:12px;border:2px dashed #ccc}
-.item-chip{background:linear-gradient(135deg,#fff,#f9f0ff);border:2px solid #CE93D8;border-radius:22px;padding:8px 16px;font-size:0.82rem;font-weight:800;cursor:grab;user-select:none;transition:transform 0.15s,box-shadow 0.15s;color:#4A148C}
+.item-chip{background:linear-gradient(135deg,#fff,#f9f0ff);border:2px solid #CE93D8;border-radius:22px;padding:8px 16px;font-size:0.82rem;font-weight:800;cursor:grab;user-select:none;transition:transform 0.15s,box-shadow 0.15s;color:#0E1C42}
 .item-chip:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .drop-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .drop-zone{background:#fff;border:3px dashed #ccc;border-radius:14px;padding:14px;min-height:110px;transition:border-color 0.2s,background 0.2s}
@@ -45,14 +45,14 @@ body{font-family:'Nunito',sans-serif;background:#F5F0E8;color:#2C2C2C;min-height
 .placed-chip.correct{background:#66BB6A}
 .placed-chip.wrong{background:#EF5350}
 .result-box{text-align:center;margin-top:14px;font-size:1.1rem;font-weight:900;display:none}
-.reset-btn{display:block;margin:10px auto 0;background:linear-gradient(135deg,#CE93D8,#7B1FA2);color:#fff;border:none;border-radius:22px;padding:9px 26px;font-size:0.85rem;font-weight:800;cursor:pointer;font-family:inherit}
+.reset-btn{display:block;margin:10px auto 0;background:linear-gradient(135deg,#0277BD,#0288D1);color:#fff;border:none;border-radius:22px;padding:9px 26px;font-size:0.85rem;font-weight:800;cursor:pointer;font-family:inherit}
 .credit-card{background:#fff;border-radius:16px;padding:20px 22px;border:2px solid #E8DDD2;box-shadow:0 3px 12px rgba(0,0,0,0.07);margin-bottom:14px}
 .credit-label{font-size:0.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:8px}
-.credit-q{font-size:0.92rem;font-weight:700;color:#4A148C;margin-bottom:10px}
+.credit-q{font-size:0.92rem;font-weight:700;color:#0E1C42;margin-bottom:10px}
 textarea{width:100%;border:2px solid #E0E0E0;border-radius:10px;padding:10px;font-family:inherit;font-size:0.85rem;resize:vertical;min-height:70px;outline:none;transition:border-color 0.2s}
 textarea:focus{border-color:#CE93D8}
 .submit-callout{background:linear-gradient(135deg,#F3E5F5,#EDE7F6);border:2px solid #CE93D8;border-radius:16px;padding:18px 22px;text-align:center;margin-top:8px}
-.submit-callout p{font-size:0.9rem;font-weight:700;color:#6A1B9A}
+.submit-callout p{font-size:0.9rem;font-weight:700;color:#1A2D5A}
 .bounce{display:inline-block;animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .footer{text-align:center;padding:16px;color:#999;font-size:0.75rem;font-weight:600;border-top:2px solid #E8DDD2;margin-top:8px}
