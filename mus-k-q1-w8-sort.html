@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>High Sounds or Low Sounds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFFCF4;
+    --plum:#3A2E39;
+    --high-color:#7ED6E0;
+    --low-color:#B98BE0;
+    --coral:#FF8C42;
+    --grass:#5FBF6F;
+    --card-shadow: 0 6px 0 rgba(58,46,57,0.15);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 12% 12%, #E7FBFD 0%, transparent 42%),
+      radial-gradient(circle at 88% 88%, #F4E9FF 0%, transparent 45%),
+      var(--cream);
+    color:var(--plum);
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px 14px 40px;
+    overflow-x:hidden;
+  }
+  h1{
+    font-size:clamp(1.4rem, 5vw, 2rem);
+    font-weight:800;
+    margin:4px 0 2px;
+    text-align:center;
+  }
+  .sub{
+    font-size:1rem;
+    font-weight:500;
+    color:#6b5c68;
+    margin:0 0 16px;
+    text-align:center;
+    max-width:360px;
+  }
+  .dots{
+    display:flex;
+    gap:6px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+    max-width:420px;
+  }
+  .dot{
+    width:16px;height:16px;border-radius:50%;
+    background:#E9E2D6;
+    border:2px solid #d8cfc0;
+    transition:transform .25s;
+  }
+  .dot.done{background:var(--grass); border-color:var(--grass); transform:scale(1.15);}
+
+  .stage{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:22px;
+  }
+
+  .card{
+    background:#fff;
+    border:3px solid var(--plum);
+    border-radius:24px;
+    box-shadow:var(--card-shadow);
+    padding:26px 18px;
+    width:min(320px, 86vw);
+    text-align:center;
+  }
+  .card-label{
+    font-size:1rem;
+    font-weight:700;
+    color:#8a7c86;
+    margin-bottom:12px;
+  }
+  .item-emoji{
+    font-size:4.5rem;
+    line-height:1;
+    margin-bottom:16px;
+  }
+  .listen-btn{
+    font-family:inherit;
+    font-size:1.05rem;
+    font-weight:800;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:16px;
+    padding:12px 22px;
+    cursor:pointer;
+    box-shadow:0 5px 0 #c9631d;
+  }
+  .listen-btn:active{transform:translateY(4px); box-shadow:none;}
+
+  .bins{
+    display:flex;
+    gap:16px;
+    width:100%;
+    justify-content:center;
+  }
+  .bin{
+    flex:1;
+    max-width:180px;
+    background:var(--high-color);
+    border:3px solid var(--plum);
+    border-radius:20px;
+    padding:16px 10px;
+    text-align:center;
+    font-weight:800;
+    font-size:1.3rem;
+    cursor:pointer;
+    box-shadow:var(--card-shadow);
+    transition:transform .15s ease;
+  }
+  .bin .icon{font-size:1.8rem; display:block; margin-bottom:2px;}
+  .bin:nth-child(2){background:var(--low-color);}
+  .bin:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(58,46,57,0.15);}
+
+  .feedback{
+    min-height:34px;
+    font-size:1.15rem;
+    font-weight:700;
+    text-align:center;
+  }
+  .feedback.good{color:var(--grass);}
+  .feedback.bad{color:#E0577B;}
+
+  .done-screen{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .done-screen .big-emoji{font-size:4rem;}
+  button.again{
+    font-family:inherit;
+    font-size:1.1rem;
+    font-weight:800;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:16px;
+    padding:14px 28px;
+    cursor:pointer;
+    box-shadow:0 5px 0 #c9631d;
+  }
+  button.again:active{transform:translateY(4px); box-shadow:none;}
+
+  .confetti{
+    position:fixed; top:-20px; font-size:1.6rem;
+    animation: fall linear forwards;
+    pointer-events:none;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(360deg); opacity:0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .bin, button.again, .listen-btn, .confetti{ transition:none; animation:none; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>High Sounds or Low Sounds?</h1>
+  <p class="sub" id="subtext">Listen to the sound, then tap the basket where it belongs.</p>
+  <div class="dots" id="dots"></div>
+
+  <div class="stage" id="stage"></div>
+
+<script>
+// Each item: emoji + name + pitch ("high" or "low") + a base frequency for the demo tone
+const ITEM_BANK = [
+  {emoji:"🐭", name:"a mouse squeak", pitch:"high", freq:1100},
+  {emoji:"🐘", name:"an elephant trumpet", pitch:"low", freq:110},
+  {emoji:"🐦", name:"a little bird tweet", pitch:"high", freq:1300},
+  {emoji:"🦁", name:"a lion's roar", pitch:"low", freq:90},
+  {emoji:"🔔", name:"a tiny bell", pitch:"high", freq:1500},
+  {emoji:"🥁", name:"a big bass drum", pitch:"low", freq:80},
+  {emoji:"🐱", name:"a kitten's meow", pitch:"high", freq:1000},
+  {emoji:"🐄", name:"a cow's moo", pitch:"low", freq:120},
+  {emoji:"🎺", name:"a piccolo trill", pitch:"high", freq:1400},
+  {emoji:"🎻", name:"a deep cello note", pitch:"low", freq:100}
+];
+
+let order = [];
+let current = 0;
+let audioCtx = null;
+
+const stage = document.getElementById('stage');
+const dotsEl = document.getElementById('dots');
+const subtext = document.getElementById('subtext');
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function getAudioCtx(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(freq){
+  try{
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.05);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.65);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.7);
+  }catch(e){ /* audio unavailable, visuals still work */ }
+}
+
+function buildDots(){
+  dotsEl.innerHTML = '';
+  order.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot-' + i;
+    dotsEl.appendChild(d);
+  });
+}
+
+function startGame(){
+  order = shuffle(ITEM_BANK);
+  current = 0;
+  subtext.textContent = "Listen to the sound, then tap the basket where it belongs.";
+  buildDots();
+  renderRound();
+}
+
+function renderRound(){
+  if(current >= order.length){
+    renderDone();
+    return;
+  }
+  const item = order[current];
+  stage.innerHTML = `
+    <div class="card">
+      <div class="card-label">What does this sound like?</div>
+      <div class="item-emoji">${item.emoji}</div>
+      <button class="listen-btn" id="listenBtn">🔊 Listen</button>
+    </div>
+    <div class="bins">
+      <div class="bin" data-value="high"><span class="icon">⬆️🎵</span>High</div>
+      <div class="bin" data-value="low"><span class="icon">⬇️🎵</span>Low</div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  `;
+  document.getElementById('listenBtn').addEventListener('click', () => playTone(item.freq));
+  // auto play once when the card appears
+  playTone(item.freq);
+  document.querySelectorAll('.bin').forEach(bin => {
+    bin.addEventListener('click', () => handleBin(bin.dataset.value));
+  });
+}
+
+function handleBin(value){
+  const item = order[current];
+  const feedback = document.getElementById('feedback');
+  if(value === item.pitch){
+    feedback.textContent = "Yes! That's " + item.name + " — a " + item.pitch + " sound! 🎉";
+    feedback.className = 'feedback good';
+    document.getElementById('dot-' + current).classList.add('done');
+    setTimeout(() => { current++; renderRound(); }, 900);
+  } else {
+    feedback.textContent = "Listen again — is it high or low?";
+    feedback.className = 'feedback bad';
+  }
+}
+
+function renderDone(){
+  subtext.textContent = "You sorted every sound!";
+  stage.innerHTML = `
+    <div class="done-screen">
+      <div class="big-emoji">🎶</div>
+      <div style="font-size:1.3rem; font-weight:800;">Great listening!</div>
+      <div>You sorted all ${order.length} sounds into high and low.</div>
+      <button class="again" id="againBtn">Play again</button>
+    </div>
+  `;
+  document.getElementById('againBtn').addEventListener('click', startGame);
+  launchConfetti();
+}
+
+function launchConfetti(){
+  const emojis = ['🎉','🎵','🎶','✨'];
+  for(let i=0;i<24;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.animationDuration = (2 + Math.random()*1.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+startGame();
+</script>
+</body>
+</html>

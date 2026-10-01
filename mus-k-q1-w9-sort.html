@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fast or Slow?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFFCF4;
+    --plum:#3A2E39;
+    --fast-color:#FF7A5C;
+    --slow-color:#4FBFA8;
+    --coral:#FFB84D;
+    --grass:#5FBF6F;
+    --card-shadow: 0 6px 0 rgba(58,46,57,0.15);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 12% 12%, #FFEDE3 0%, transparent 42%),
+      radial-gradient(circle at 88% 88%, #E1FBF3 0%, transparent 45%),
+      var(--cream);
+    color:var(--plum);
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px 14px 40px;
+    overflow-x:hidden;
+  }
+  h1{
+    font-size:clamp(1.4rem, 5vw, 2rem);
+    font-weight:800;
+    margin:4px 0 2px;
+    text-align:center;
+  }
+  .sub{
+    font-size:1rem;
+    font-weight:500;
+    color:#6b5c68;
+    margin:0 0 16px;
+    text-align:center;
+    max-width:360px;
+  }
+  .dots{
+    display:flex;
+    gap:6px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+    max-width:420px;
+  }
+  .dot{
+    width:16px;height:16px;border-radius:50%;
+    background:#E9E2D6;
+    border:2px solid #d8cfc0;
+    transition:transform .25s;
+  }
+  .dot.done{background:var(--grass); border-color:var(--grass); transform:scale(1.15);}
+
+  .stage{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:22px;
+  }
+
+  .card{
+    background:#fff;
+    border:3px solid var(--plum);
+    border-radius:24px;
+    box-shadow:var(--card-shadow);
+    padding:22px 18px;
+    width:min(340px, 90vw);
+    text-align:center;
+  }
+  .card-label{
+    font-size:1rem;
+    font-weight:700;
+    color:#8a7c86;
+    margin-bottom:14px;
+  }
+  .track{
+    position:relative;
+    height:64px;
+    width:100%;
+    background:#F5F1E6;
+    border-radius:14px;
+    overflow:hidden;
+    margin-bottom:16px;
+    border:2px dashed #d8cfc0;
+  }
+  .mover{
+    position:absolute;
+    top:50%;
+    left:-15%;
+    transform:translateY(-50%);
+    font-size:2.6rem;
+    line-height:1;
+  }
+  .mover.moving{
+    animation-name: moveAcross;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  @keyframes moveAcross{
+    from{ left:-15%; }
+    to{ left:100%; }
+  }
+  .watch-btn{
+    font-family:inherit;
+    font-size:1.05rem;
+    font-weight:800;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:16px;
+    padding:12px 22px;
+    cursor:pointer;
+    box-shadow:0 5px 0 #cc8c2e;
+  }
+  .watch-btn:active{transform:translateY(4px); box-shadow:none;}
+
+  .bins{
+    display:flex;
+    gap:16px;
+    width:100%;
+    justify-content:center;
+  }
+  .bin{
+    flex:1;
+    max-width:180px;
+    background:var(--fast-color);
+    border:3px solid var(--plum);
+    border-radius:20px;
+    padding:16px 10px;
+    text-align:center;
+    font-weight:800;
+    font-size:1.3rem;
+    cursor:pointer;
+    box-shadow:var(--card-shadow);
+    transition:transform .15s ease;
+    color:#fff;
+  }
+  .bin .icon{font-size:1.8rem; display:block; margin-bottom:2px;}
+  .bin:nth-child(2){background:var(--slow-color);}
+  .bin:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(58,46,57,0.15);}
+
+  .feedback{
+    min-height:34px;
+    font-size:1.15rem;
+    font-weight:700;
+    text-align:center;
+  }
+  .feedback.good{color:var(--grass);}
+  .feedback.bad{color:#E0577B;}
+
+  .done-screen{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .done-screen .big-emoji{font-size:4rem;}
+  button.again{
+    font-family:inherit;
+    font-size:1.1rem;
+    font-weight:800;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:16px;
+    padding:14px 28px;
+    cursor:pointer;
+    box-shadow:0 5px 0 #cc8c2e;
+  }
+  button.again:active{transform:translateY(4px); box-shadow:none;}
+
+  .confetti{
+    position:fixed; top:-20px; font-size:1.6rem;
+    animation: fall linear forwards;
+    pointer-events:none;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(360deg); opacity:0.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .bin, button.again, .watch-btn{ transition:none; }
+    .mover.moving{ animation:none; left:40%; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>Fast or Slow?</h1>
+  <p class="sub" id="subtext">Watch it move, then tap the basket where it belongs.</p>
+  <div class="dots" id="dots"></div>
+
+  <div class="stage" id="stage"></div>
+
+<script>
+const ITEM_BANK = [
+  {emoji:"🐆", name:"a cheetah", speed:"fast", dur:0.7},
+  {emoji:"🐢", name:"a turtle", speed:"slow", dur:5},
+  {emoji:"🏎️", name:"a race car", speed:"fast", dur:0.6},
+  {emoji:"🐌", name:"a snail", speed:"slow", dur:6},
+  {emoji:"🚀", name:"a rocket", speed:"fast", dur:0.5},
+  {emoji:"🦥", name:"a sloth", speed:"slow", dur:5.5},
+  {emoji:"🐇", name:"a rabbit", speed:"fast", dur:0.8},
+  {emoji:"🐛", name:"a caterpillar", speed:"slow", dur:5.5},
+  {emoji:"✈️", name:"an airplane", speed:"fast", dur:0.7},
+  {emoji:"🐘", name:"an elephant walking", speed:"slow", dur:4.5}
+];
+
+let order = [];
+let current = 0;
+
+const stage = document.getElementById('stage');
+const dotsEl = document.getElementById('dots');
+const subtext = document.getElementById('subtext');
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function buildDots(){
+  dotsEl.innerHTML = '';
+  order.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot-' + i;
+    dotsEl.appendChild(d);
+  });
+}
+
+function startGame(){
+  order = shuffle(ITEM_BANK);
+  current = 0;
+  subtext.textContent = "Watch it move, then tap the basket where it belongs.";
+  buildDots();
+  renderRound();
+}
+
+function playMove(dur){
+  const mover = document.getElementById('mover');
+  mover.classList.remove('moving');
+  mover.style.left = '-15%';
+  void mover.offsetWidth; // force reflow to restart animation
+  mover.style.animationDuration = dur + 's';
+  mover.classList.add('moving');
+}
+
+function renderRound(){
+  if(current >= order.length){
+    renderDone();
+    return;
+  }
+  const item = order[current];
+  stage.innerHTML = `
+    <div class="card">
+      <div class="card-label">Is ${item.name} fast or slow?</div>
+      <div class="track"><div class="mover" id="mover">${item.emoji}</div></div>
+      <button class="watch-btn" id="watchBtn">▶️ Watch again</button>
+    </div>
+    <div class="bins">
+      <div class="bin" data-value="fast"><span class="icon">⚡</span>Fast</div>
+      <div class="bin" data-value="slow"><span class="icon">🐢</span>Slow</div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  `;
+  document.getElementById('watchBtn').addEventListener('click', () => playMove(item.dur));
+  setTimeout(() => playMove(item.dur), 150);
+  document.querySelectorAll('.bin').forEach(bin => {
+    bin.addEventListener('click', () => handleBin(bin.dataset.value));
+  });
+}
+
+function handleBin(value){
+  const item = order[current];
+  const feedback = document.getElementById('feedback');
+  if(value === item.speed){
+    feedback.textContent = "Yes! " + item.name + " is " + item.speed + "! 🎉";
+    feedback.className = 'feedback good';
+    document.getElementById('dot-' + current).classList.add('done');
+    setTimeout(() => { current++; renderRound(); }, 900);
+  } else {
+    feedback.textContent = "Watch again — is it fast or slow?";
+    feedback.className = 'feedback bad';
+  }
+}
+
+function renderDone(){
+  subtext.textContent = "You sorted them all!";
+  stage.innerHTML = `
+    <div class="done-screen">
+      <div class="big-emoji">🏁</div>
+      <div style="font-size:1.3rem; font-weight:800;">Great sorting!</div>
+      <div>You sorted all ${order.length} things into fast and slow.</div>
+      <button class="again" id="againBtn">Play again</button>
+    </div>
+  `;
+  document.getElementById('againBtn').addEventListener('click', startGame);
+  launchConfetti();
+}
+
+function launchConfetti(){
+  const emojis = ['🎉','⚡','🏁','✨'];
+  for(let i=0;i<24;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.animationDuration = (2 + Math.random()*1.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+startGame();
+</script>
+</body>
+</html>
